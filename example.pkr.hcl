@@ -43,6 +43,15 @@ source "amazon-ebs" "example" {
 # a build block invokes sources and runs provisioning steps on them.
 build {
   sources = ["source.amazon-ebs.example"]
-
+  provisioner "shell" {
+    inline = [
+      "sleep 30",
+      "sudo apt-get update",
+      "sudo apt-get install -y redis-server",
+    ]
+    /*
+      Note from tutorial on use of sleep: The sleep 30 in the example above is important. Because Packer is able to detect and SSH into the instance as soon as SSH is available, Ubuntu actually doesn't get proper amount of time to initialize. The sleep makes sure that the OS properly initializes.
+    */
+  }
 }
 
